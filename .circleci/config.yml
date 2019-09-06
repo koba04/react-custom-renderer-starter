@@ -1,0 +1,43 @@
+version: 2.1
+
+commands:
+  run-npm-test:
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+      # run tests!
+      - run: npm run lint
+      - run: npm test
+jobs:
+  node-v8:
+    docker:
+      - image: circleci/node:8@sha256:a79003299988717db361500d11d0b8184d70609510b942e8f995ccf350393a54
+    steps:
+      - run-npm-test
+  node-v10:
+    docker:
+      - image: circleci/node:10@sha256:650883b229d4122394a0cb1f3fbe48a7587fa6e503d222a2ff121a503b87019d
+    steps:
+      - run-npm-test
+  node-v12:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - run-npm-test
+
+workflows:
+  multiple_builds:
+    jobs:
+      - node-v8
+      - node-v10
+      - node-v12
