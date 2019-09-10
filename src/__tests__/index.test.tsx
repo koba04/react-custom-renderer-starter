@@ -3,6 +3,7 @@ import { ReactDebug } from "../index";
 
 describe("index", () => {
   it("should pass", () => {
-    ReactDebug.render(<div>foo</div>);
+    // This test should be failed
+    expect(() => ReactDebug.render(<div>foo</div>)).toThrow();
   });
 });
