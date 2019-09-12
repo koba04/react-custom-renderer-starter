@@ -60,6 +60,15 @@ const HostConfig: HostConfigInterface<
   ): Instance {
     return {};
   },
+  appendChild() {
+    // noop
+  },
+  appendChildToContainer() {
+    // noop
+  },
+  commitMount() {
+    // noop
+  },
   appendInitialChild(
     parentInstance: Instance,
     child: Instance | TextInstance
