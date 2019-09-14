@@ -7,13 +7,17 @@ import { debug } from "./logger";
 type Type = string;
 type Props = object;
 type Container = object;
+
 type Instance = {
   type: Type;
   props: Props;
   child?: Instance;
 };
-type TextInstance = object;
+
+type TextInstance = string;
+
 type HydratableInstance = object;
+
 type PublicInstance = {
   inst: Instance | TextInstance;
 };
@@ -162,7 +166,7 @@ const HostConfig: HostConfigInterface<
     internalInstanceHandle: OpaqueHandle
   ): TextInstance {
     debug("createTextInstance");
-    return {};
+    return text;
   },
   scheduleDeferredCallback(
     callback: () => any,
