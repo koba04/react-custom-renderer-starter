@@ -7,15 +7,14 @@ type Container = {
 };
 
 export const ReactDebug = {
-  render(element: React.ReactNode, container: Container, callback?: () => {}) {
+  render(element: React.ReactNode, container: Container, callback = () => {}) {
     if (typeof container.fiberRoot === "undefined") {
-      container.fiberRoot = DebugRenderer.createContainer({}, false, false);
+      container.fiberRoot = DebugRenderer.createContainer(
+        { name: "container" },
+        false,
+        false
+      );
     }
-    DebugRenderer.updateContainer(
-      element,
-      container.fiberRoot,
-      null,
-      () => null
-    );
+    DebugRenderer.updateContainer(element, container.fiberRoot, null, callback);
   }
 };

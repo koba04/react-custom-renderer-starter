@@ -6,29 +6,35 @@ import { debug } from "./logger";
 
 type Type = string;
 type Props = object;
-type Container = object;
+type Container = {
+  name: "container";
+};
 
 type Instance = {
   type: Type;
   props: Props;
-  child?: Instance;
+  children: Instance[];
 };
 
 type TextInstance = string;
 
-type HydratableInstance = object;
-
-type PublicInstance = {
+export type PublicInstance = {
   inst: Instance | TextInstance;
 };
-type HostContext = object;
+type HostContext = {
+  name: "context";
+};
+
+type HydratableInstance = object;
 type UpdatePayload = object;
 type ChildSet = object;
 type TimeoutHandle = object;
 type NoTimeout = object;
-
-// Fiber
 type OpaqueHandle = any;
+
+const context: HostContext = {
+  name: "context"
+};
 
 const HostConfig: HostConfigInterface<
   Type,
@@ -52,7 +58,7 @@ const HostConfig: HostConfigInterface<
   },
   getRootHostContext(rootContainerInstance: Container): HostContext {
     debug("getRootHostContext");
-    return {};
+    return context;
   },
   getChildHostContext(
     parentHostContext: HostContext,
@@ -60,7 +66,7 @@ const HostConfig: HostConfigInterface<
     rootContainerInstance: Container
   ): HostContext {
     debug("getChildHostContext");
-    return {};
+    return context;
   },
   prepareForCommit(containerInfo: Container): void {
     debug("prepareForCommit", containerInfo);
@@ -75,18 +81,24 @@ const HostConfig: HostConfigInterface<
     hostContext: HostContext,
     internalInstanceHandle: OpaqueHandle
   ): Instance {
-    debug("createInstance");
+    debug("createInstance", {
+      type,
+      props,
+      rootContainerInstance,
+      hostContext
+    });
     return {
       type,
-      props
+      props,
+      children: []
     };
   },
   appendChild(parentInstance: Instance, child: Instance) {
     debug("appendChild", parentInstance, child);
-    parentInstance.child = child;
+    parentInstance.children.push(child);
   },
-  appendChildToContainer(parentInstance: Instance, child: Instance) {
-    debug("appendChild", parentInstance, child);
+  appendChildToContainer(container: Container, child: Instance) {
+    debug("appendChild", container, child);
   },
   commitMount(
     instance: Instance,
@@ -116,10 +128,9 @@ const HostConfig: HostConfigInterface<
       oldProps,
       newProps
     });
-    if (oldProps !== newProps) {
-      console.log("props have been changed");
-      instance.props = newProps;
-    }
+    instance.props = newProps;
+    // TODO: diff oldProps and newProps
+    console.log(oldProps, newProps);
   },
   appendInitialChild(
     parentInstance: Instance,
