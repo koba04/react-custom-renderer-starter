@@ -7,10 +7,16 @@ import { debug } from "./logger";
 type Type = string;
 type Props = object;
 type Container = object;
-type Instance = object;
+type Instance = {
+  type: Type;
+  props: Props;
+  child?: Instance;
+};
 type TextInstance = object;
 type HydratableInstance = object;
-type PublicInstance = object;
+type PublicInstance = {
+  inst: Instance | TextInstance;
+};
 type HostContext = object;
 type UpdatePayload = object;
 type ChildSet = object;
@@ -36,7 +42,9 @@ const HostConfig: HostConfigInterface<
 > = {
   getPublicInstance(instance: Instance | TextInstance): PublicInstance {
     debug("getPublicInstance");
-    return {};
+    return {
+      inst: instance
+    };
   },
   getRootHostContext(rootContainerInstance: Container): HostContext {
     debug("getRootHostContext");
@@ -64,10 +72,14 @@ const HostConfig: HostConfigInterface<
     internalInstanceHandle: OpaqueHandle
   ): Instance {
     debug("createInstance");
-    return {};
+    return {
+      type,
+      props
+    };
   },
   appendChild(parentInstance: Instance, child: Instance) {
     debug("appendChild", parentInstance, child);
+    parentInstance.child = child;
   },
   appendChildToContainer(parentInstance: Instance, child: Instance) {
     debug("appendChild", parentInstance, child);
@@ -85,6 +97,26 @@ const HostConfig: HostConfigInterface<
       newProps /* , internalInstanceHandle */
     );
   },
+  commitUpdate(
+    instance: Instance,
+    updatePayload: object,
+    type: string,
+    oldProps: object,
+    newProps: object,
+    internalInstanceHandle: Reconciler.Fiber
+  ) {
+    debug("commitUpdate", {
+      instance,
+      updatePayload,
+      type,
+      oldProps,
+      newProps
+    });
+    if (oldProps !== newProps) {
+      console.log("props have been changed");
+      instance.props = newProps;
+    }
+  },
   appendInitialChild(
     parentInstance: Instance,
     child: Instance | TextInstance
@@ -100,6 +132,9 @@ const HostConfig: HostConfigInterface<
   ): boolean {
     debug("finalizeInitialChildren");
     return true;
+  },
+  removeChildFromContainer() {
+    debug("removeChildFromContainer");
   },
   prepareUpdate(
     instance: Instance,
