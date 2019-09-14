@@ -19,16 +19,17 @@ describe("index", () => {
   it("should be able to render composite components", () => {
     const Button = (props: { text: string }) => <button>{props.text}</button>;
     const MemoizedButton = React.memo(Button);
-    const App = () => (
+    const App = (props: { message: string }) => (
       <section>
         <Button text="click" />
+        <p>{props.message}</p>
         <MemoizedButton text="memo" />
       </section>
     );
     expect(() => {
       const container = {};
-      ReactDebug.render(<App />, container);
-      ReactDebug.render(<App />, container);
+      ReactDebug.render(<App message="Hello" />, container);
+      ReactDebug.render(<App message="World" />, container);
     }).not.toThrow();
   });
 });

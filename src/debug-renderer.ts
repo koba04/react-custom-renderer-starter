@@ -132,9 +132,7 @@ const HostConfig: HostConfigInterface<
       oldProps,
       newProps
     });
-    instance.props = newProps;
     // TODO: diff oldProps and newProps
-    console.log(oldProps, newProps);
   },
   appendInitialChild(
     parentInstance: Instance,
