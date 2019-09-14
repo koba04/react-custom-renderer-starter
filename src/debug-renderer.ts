@@ -2,6 +2,8 @@ import Reconciler, {
   HostConfig as HostConfigInterface
 } from "react-reconciler";
 
+import { debug } from "./logger";
+
 type Type = string;
 type Props = object;
 type Container = object;
@@ -33,9 +35,11 @@ const HostConfig: HostConfigInterface<
   NoTimeout
 > = {
   getPublicInstance(instance: Instance | TextInstance): PublicInstance {
+    debug("getPublicInstance");
     return {};
   },
   getRootHostContext(rootContainerInstance: Container): HostContext {
+    debug("getRootHostContext");
     return {};
   },
   getChildHostContext(
@@ -43,13 +47,14 @@ const HostConfig: HostConfigInterface<
     type: Type,
     rootContainerInstance: Container
   ): HostContext {
+    debug("getChildHostContext");
     return {};
   },
   prepareForCommit(containerInfo: Container): void {
-    // noop
+    debug("prepareForCommit", containerInfo);
   },
   resetAfterCommit(containerInfo: Container): void {
-    // noop
+    debug("resetAfterCommit", containerInfo);
   },
   createInstance(
     type: Type,
@@ -58,22 +63,33 @@ const HostConfig: HostConfigInterface<
     hostContext: HostContext,
     internalInstanceHandle: OpaqueHandle
   ): Instance {
+    debug("createInstance");
     return {};
   },
-  appendChild() {
-    // noop
+  appendChild(parentInstance: Instance, child: Instance) {
+    debug("appendChild", parentInstance, child);
   },
-  appendChildToContainer() {
-    // noop
+  appendChildToContainer(parentInstance: Instance, child: Instance) {
+    debug("appendChild", parentInstance, child);
   },
-  commitMount() {
-    // noop
+  commitMount(
+    instance: Instance,
+    type: Type,
+    newProps: Props,
+    internalInstanceHandle: Reconciler.Fiber
+  ) {
+    debug(
+      "commitMount",
+      instance,
+      type,
+      newProps /* , internalInstanceHandle */
+    );
   },
   appendInitialChild(
     parentInstance: Instance,
     child: Instance | TextInstance
   ): void {
-    // noop
+    debug("appendInitialChild", parentInstance, child);
   },
   finalizeInitialChildren(
     parentInstance: Instance,
@@ -82,6 +98,7 @@ const HostConfig: HostConfigInterface<
     rootContainerInstance: Container,
     hostContext: HostContext
   ): boolean {
+    debug("finalizeInitialChildren");
     return true;
   },
   prepareUpdate(
@@ -92,12 +109,15 @@ const HostConfig: HostConfigInterface<
     rootContainerInstance: Container,
     hostContext: HostContext
   ): null | UpdatePayload {
+    debug("prepareUpdate");
     return {};
   },
   shouldSetTextContent(type: Type, props: Props): boolean {
+    debug("shouldSetTextContent");
     return true;
   },
   shouldDeprioritizeSubtree(type: Type, props: Props): boolean {
+    debug("shouldDeprioritizeSubtree");
     return false;
   },
   createTextInstance(
@@ -106,6 +126,7 @@ const HostConfig: HostConfigInterface<
     hostContext: HostContext,
     internalInstanceHandle: OpaqueHandle
   ): TextInstance {
+    debug("createTextInstance");
     return {};
   },
   scheduleDeferredCallback(
