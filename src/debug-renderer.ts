@@ -10,17 +10,22 @@ type Container = {
   name: "container";
 };
 
+// An instance type for your host environment
 type Instance = {
   type: Type;
   props: Props;
   children: Instance[];
 };
 
+// An text instance type for your host environment
 type TextInstance = string;
 
+// This type is expose to users
+// react-dom's one is a HTMLElement
 export type PublicInstance = {
   inst: Instance | TextInstance;
 };
+
 type HostContext = {
   name: "context";
 };
@@ -69,10 +74,10 @@ const HostConfig: HostConfigInterface<
     return context;
   },
   prepareForCommit(containerInfo: Container): void {
-    debug("prepareForCommit", containerInfo);
+    debug("prepareForCommit", { containerInfo });
   },
   resetAfterCommit(containerInfo: Container): void {
-    debug("resetAfterCommit", containerInfo);
+    debug("resetAfterCommit", { containerInfo });
   },
   createInstance(
     type: Type,
@@ -94,11 +99,11 @@ const HostConfig: HostConfigInterface<
     };
   },
   appendChild(parentInstance: Instance, child: Instance) {
-    debug("appendChild", parentInstance, child);
+    debug("appendChild", { parentInstance, child });
     parentInstance.children.push(child);
   },
   appendChildToContainer(container: Container, child: Instance) {
-    debug("appendChild", container, child);
+    debug("appendChild", { container, child });
   },
   commitMount(
     instance: Instance,
@@ -106,12 +111,11 @@ const HostConfig: HostConfigInterface<
     newProps: Props,
     internalInstanceHandle: Reconciler.Fiber
   ) {
-    debug(
-      "commitMount",
+    debug("commitMount", {
       instance,
       type,
       newProps /* , internalInstanceHandle */
-    );
+    });
   },
   commitUpdate(
     instance: Instance,
@@ -136,7 +140,7 @@ const HostConfig: HostConfigInterface<
     parentInstance: Instance,
     child: Instance | TextInstance
   ): void {
-    debug("appendInitialChild", parentInstance, child);
+    debug("appendInitialChild", { parentInstance, child });
   },
   finalizeInitialChildren(
     parentInstance: Instance,
