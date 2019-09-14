@@ -1,5 +1,5 @@
 import React from "react";
-import { ReactDebug } from "../index";
+import { ReactDebug, RootContainer } from "../index";
 
 describe("index", () => {
   it("should be able to render host components and text", () => {
@@ -31,5 +31,15 @@ describe("index", () => {
       ReactDebug.render(<App message="Hello" />, container);
       ReactDebug.render(<App message="World" />, container);
     }).not.toThrow();
+  });
+
+  it("should be able to get logs from a container", () => {
+    const container: RootContainer = {};
+    ReactDebug.render(<div id="foo">foo</div>, container);
+    ReactDebug.render(<div id="foo">foo</div>, container);
+    expect(container.container.logs.map(([operation]) => operation)).toEqual([
+      "commitMount",
+      "commitUpdate"
+    ]);
   });
 });

@@ -6,8 +6,9 @@ import { debug } from "./logger";
 
 type Type = string;
 type Props = object;
-type Container = {
+export type Container = {
   name: "container";
+  logs: any[];
 };
 
 // An instance type for your host environment
@@ -15,6 +16,7 @@ type Instance = {
   type: Type;
   props: Props;
   children: Instance[];
+  rootContainerInstance: Container;
 };
 
 // An text instance type for your host environment
@@ -95,6 +97,7 @@ const HostConfig: HostConfigInterface<
     return {
       type,
       props,
+      rootContainerInstance,
       children: []
     };
   },
@@ -116,6 +119,14 @@ const HostConfig: HostConfigInterface<
       type,
       newProps /* , internalInstanceHandle */
     });
+    instance.rootContainerInstance.logs.push([
+      "commitMount",
+      {
+        instance,
+        type,
+        newProps
+      }
+    ]);
   },
   commitUpdate(
     instance: Instance,
@@ -132,6 +143,16 @@ const HostConfig: HostConfigInterface<
       oldProps,
       newProps
     });
+    instance.rootContainerInstance.logs.push([
+      "commitUpdate",
+      {
+        instance,
+        updatePayload,
+        type,
+        oldProps,
+        newProps
+      }
+    ]);
     // TODO: diff oldProps and newProps
   },
   appendInitialChild(
