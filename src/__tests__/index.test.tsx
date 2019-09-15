@@ -5,17 +5,21 @@ describe("index", () => {
   it("should be able to render host components and text", () => {
     expect(() => {
       const container = {};
-      ReactDebug.render(<div id="foo">foo</div>, container);
+      ReactDebug.render(
+        <div id="foo">
+          <p>foo</p>
+        </div>,
+        container
+      );
       console.log("========== second render ==============");
       ReactDebug.render(
         <div id="foo" className="bar">
-          bar
+          <p>bar</p>
         </div>,
         container
       );
     }).not.toThrow();
   });
-
   it("should be able to render composite components", () => {
     const Button = (props: { text: string }) => <button>{props.text}</button>;
     const MemoizedButton = React.memo(Button);

@@ -5,18 +5,45 @@ import Reconciler, {
 import { debug } from "./logger";
 
 type Type = string;
-type Props = object;
+type Props = {
+  [key: string]: any;
+};
+
 export type Container = {
   name: "container";
   logs: any[];
 };
 
+type Children = Instance | TextInstance;
+
 // An instance type for your host environment
 type Instance = {
   type: Type;
   props: Props;
-  children: Instance[];
+  children: Children[];
   rootContainerInstance: Container;
+};
+
+const getComponentName = (type: Type): string => {
+  if (typeof type === "string") return type;
+  if (typeof type === "function") {
+    return (type as any).displayName || (type as any).name || null;
+  }
+  return getComponentName((type as any).type);
+};
+
+const toJSON = (instance: Instance | TextInstance): object | string | null => {
+  if (typeof instance === "string") return instance;
+  if (typeof instance === "undefined") return null;
+  const { children, ...props } = instance.props;
+  return {
+    type: getComponentName(instance.type),
+    props,
+    // child might include ReactElement so this is a type mismatch
+    children: Array.isArray(children)
+      ? children.map((child: any) => toJSON(child))
+      : toJSON(children)
+  };
 };
 
 // An text instance type for your host environment
@@ -85,7 +112,8 @@ const HostConfig: HostConfigInterface<
       type,
       props,
       rootContainerInstance,
-      hostContext
+      hostContext,
+      children: props.children
     });
     return {
       type,
@@ -99,7 +127,7 @@ const HostConfig: HostConfigInterface<
     parentInstance.children.push(child);
   },
   appendChildToContainer(container: Container, child: Instance) {
-    debug("appendChild", { container, child });
+    debug("appendChildToContainer", { container, child });
   },
   commitMount(
     instance: Instance,
@@ -112,6 +140,7 @@ const HostConfig: HostConfigInterface<
       type,
       newProps /* , internalInstanceHandle */
     });
+    debug(JSON.stringify(toJSON(instance), null, 2));
     instance.rootContainerInstance.logs.push([
       "commitMount",
       {
@@ -147,12 +176,15 @@ const HostConfig: HostConfigInterface<
       }
     ]);
     // TODO: diff oldProps and newProps
+    instance.props = newProps;
+    debug(JSON.stringify(toJSON(instance), null, 2));
   },
   appendInitialChild(
     parentInstance: Instance,
     child: Instance | TextInstance
   ): void {
     debug("appendInitialChild", { parentInstance, child });
+    parentInstance.children.push(child);
   },
   finalizeInitialChildren(
     parentInstance: Instance,
@@ -204,15 +236,9 @@ const HostConfig: HostConfigInterface<
   cancelDeferredCallback(callbackID: any): void {
     // noop
   },
-  setTimeout(
-    handler: (...args: any[]) => void,
-    timeout: number
-  ): TimeoutHandle | NoTimeout {
-    return {};
-  },
-  clearTimeout(handle: TimeoutHandle | NoTimeout): void {
-    // noop
-  },
+  // we use the native implementation
+  setTimeout,
+  clearTimeout,
   noTimeout: {},
   now: Date.now,
   // Temporary workaround for scenario where multiple renderers concurrently
