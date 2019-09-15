@@ -24,9 +24,7 @@ type TextInstance = string;
 
 // This type is expose to users
 // react-dom's one is a HTMLElement
-export type PublicInstance = {
-  inst: Instance | TextInstance;
-};
+export type PublicInstance = Instance | TextInstance;
 
 type HostContext = {
   name: "context";
@@ -58,13 +56,9 @@ const HostConfig: HostConfigInterface<
   NoTimeout
 > = {
   getPublicInstance(instance: Instance | TextInstance): PublicInstance {
-    debug("getPublicInstance");
-    return {
-      inst: instance
-    };
+    return instance;
   },
   getRootHostContext(rootContainerInstance: Container): HostContext {
-    debug("getRootHostContext");
     return context;
   },
   getChildHostContext(
@@ -72,7 +66,6 @@ const HostConfig: HostConfigInterface<
     type: Type,
     rootContainerInstance: Container
   ): HostContext {
-    debug("getChildHostContext");
     return context;
   },
   prepareForCommit(containerInfo: Container): void {
