@@ -1,11 +1,11 @@
 import React from "react";
-import { ReactDebug, RootContainer } from "../index";
+import { ReactJSON, RootContainer } from "../index";
 
-describe("index", () => {
+describe("ReactJSON", () => {
   it("should be able to render host components and text", () => {
     const container: RootContainer = {};
     expect(() => {
-      ReactDebug.render(
+      ReactJSON.render(
         <div id="foo">
           <p className="paragraph">
             <span>foo</span>
@@ -13,7 +13,7 @@ describe("index", () => {
         </div>,
         container
       );
-      ReactDebug.render(
+      ReactJSON.render(
         <div id="foo" className="bar">
           <p className="paragraph">
             <span className="em">bar</span>
@@ -22,13 +22,13 @@ describe("index", () => {
         container
       );
     }).not.toThrow();
-    expect(ReactDebug.toJSON(container.container)).toMatchSnapshot();
+    expect(ReactJSON.toJSON(container.container)).toMatchSnapshot();
   });
 
   it("should be able to handle swapping list items", () => {
     const container: RootContainer = {};
     expect(() => {
-      ReactDebug.render(
+      ReactJSON.render(
         <ul>
           <li key="a">a</li>
           <li key="b">b</li>
@@ -36,7 +36,7 @@ describe("index", () => {
         </ul>,
         container
       );
-      ReactDebug.render(
+      ReactJSON.render(
         <ul>
           <li key="b">b</li>
           <li key="a">a</li>
@@ -45,7 +45,7 @@ describe("index", () => {
         container
       );
     }).not.toThrow();
-    const json: any = ReactDebug.toJSON(container.container);
+    const json: any = ReactJSON.toJSON(container.container);
     expect(json.children.map(child => child.children[0])).toEqual([
       "b",
       "a",
@@ -66,16 +66,16 @@ describe("index", () => {
     );
     const container: RootContainer = {};
     expect(() => {
-      ReactDebug.render(<App message="Hello" />, container);
-      ReactDebug.render(<App message="World" />, container);
+      ReactJSON.render(<App message="Hello" />, container);
+      ReactJSON.render(<App message="World" />, container);
     }).not.toThrow();
-    expect(ReactDebug.toJSON(container.container)).toMatchSnapshot();
+    expect(ReactJSON.toJSON(container.container)).toMatchSnapshot();
   });
 
   it("should be able to get logs from a container", () => {
     const container: RootContainer = {};
-    ReactDebug.render(<div id="foo">foo</div>, container);
-    ReactDebug.render(<div id="foo">foo</div>, container);
+    ReactJSON.render(<div id="foo">foo</div>, container);
+    ReactJSON.render(<div id="foo">foo</div>, container);
     expect(container.container.logs.map(([operation]) => operation)).toEqual([
       "commitMount",
       "commitUpdate"

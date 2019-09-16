@@ -11,7 +11,7 @@ import {
   NoTimeout,
   UpdatePayload,
   Container
-} from "./debug-renderer-types";
+} from "./json-renderer-types";
 import { debug } from "../logger";
 
 const context: HostContext = {
