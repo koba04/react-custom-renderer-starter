@@ -14,28 +14,6 @@ import {
 } from "./debug-renderer-types";
 import { debug } from "../logger";
 
-const getComponentName = (type: Type): string => {
-  if (typeof type === "string") return type;
-  if (typeof type === "function") {
-    return (type as any).displayName || (type as any).name || null;
-  }
-  return getComponentName((type as any).type);
-};
-
-const toJSON = (instance: Instance | TextInstance): object | string | null => {
-  if (typeof instance === "string") return instance;
-  if (typeof instance === "undefined") return null;
-  const { children, ...props } = instance.props;
-  return {
-    type: getComponentName(instance.type),
-    props,
-    // child might include ReactElement so this is a type mismatch
-    children: Array.isArray(children)
-      ? children.map((child: any) => toJSON(child))
-      : toJSON(children)
-  };
-};
-
 const context: HostContext = {
   name: "context"
 };
@@ -83,6 +61,7 @@ export function createInstance(
     children: props.children
   });
   return {
+    tag: "HOST",
     type,
     props,
     rootContainerInstance,
@@ -96,6 +75,7 @@ export function appendChild(parentInstance: Instance, child: Instance) {
 }
 
 export function appendChildToContainer(container: Container, child: Instance) {
+  container.children.push(child);
   debug("appendChildToContainer", { container, child });
 }
 
@@ -110,7 +90,6 @@ export function commitMount(
     type,
     newProps /* , internalInstanceHandle */
   });
-  debug(JSON.stringify(toJSON(instance), null, 2));
   instance.rootContainerInstance.logs.push([
     "commitMount",
     {
@@ -148,7 +127,6 @@ export function commitUpdate(
   ]);
   // TODO: diff oldProps and newProps
   instance.props = newProps;
-  debug(JSON.stringify(toJSON(instance), null, 2));
 }
 
 export function commitTextUpdate(
@@ -156,7 +134,10 @@ export function commitTextUpdate(
   oldText: string,
   newText: string
 ) {
-  // noop
+  debug("commitTextUpdate", { textInstance, oldText, newText });
+  if (oldText !== newText) {
+    textInstance.text = newText;
+  }
 }
 
 export function appendInitialChild(
@@ -219,7 +200,11 @@ export function createTextInstance(
   internalInstanceHandle: OpaqueHandle
 ): TextInstance {
   debug("createTextInstance");
-  return text;
+  return {
+    tag: "TEXT",
+    text,
+    rootContainerInstance
+  };
 }
 
 export function scheduleDeferredCallback(

@@ -4,7 +4,22 @@ export type Props = {
 };
 
 // An text instance type for your host environment
-export type TextInstance = string;
+export type TextInstance = {
+  tag: "TEXT";
+  text: string;
+  rootContainerInstance: Container;
+};
+
+// An instance type for your host environment
+export type Instance = {
+  tag: "HOST";
+  type: Type;
+  props: Props;
+  children: ChildrenInstace[];
+  rootContainerInstance: Container;
+};
+
+export type ChildrenInstace = Instance | TextInstance;
 
 // This type is expose to users
 // react-dom's one is a HTMLElement
@@ -17,16 +32,7 @@ export type HostContext = {
 export type Container = {
   name: "container";
   logs: any[];
-};
-
-type Children = Instance | TextInstance;
-
-// An instance type for your host environment
-export type Instance = {
-  type: Type;
-  props: Props;
-  children: Children[];
-  rootContainerInstance: Container;
+  children: ChildrenInstace[];
 };
 
 export type HydratableInstance = object;
