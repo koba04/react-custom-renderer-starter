@@ -1,6 +1,11 @@
 import React from "react";
 import { DebugRenderer } from "./debug-renderer";
-import { Container, Instance, TextInstance } from "./debug-renderer-types";
+import {
+  Container,
+  Instance,
+  TextInstance,
+  Type
+} from "./debug-renderer-types";
 import ReactReconciler from "react-reconciler";
 
 export type RootContainer = {
@@ -16,7 +21,7 @@ const getComponentName = (type: Type): string => {
   return getComponentName((type as any).type);
 };
 
-const toJSON = (instance: Instance | TextInstance): object | string | null => {
+const toJSON = (instance: Instance | TextInstance): object | string => {
   if (instance.tag === "TEXT") {
     return instance.text;
   }
@@ -57,15 +62,14 @@ export const ReactDebug = {
       );
     }
     DebugRenderer.updateContainer(element, container.fiberRoot, null, () => {
-      if (rootContainer.children.length === 1) {
-        console.log(JSON.stringify(toJSON(rootContainer.children[0]), null, 2));
-      } else {
-        rootContainer.children.forEach(child => {
-          console.log(JSON.stringify(toJSON(child), null, 2));
-        });
-      }
       callback();
     });
+  },
+  toJSON(container: Container): object | string {
+    if (container.children.length === 1) {
+      return toJSON(container.children[0]);
+    }
+    return container.children.map(toJSON);
   },
   getLogs(container: RootContainer): any[] {
     return container.container ? container.container.logs : [];

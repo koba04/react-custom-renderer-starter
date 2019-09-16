@@ -3,8 +3,8 @@ import { ReactDebug, RootContainer } from "../index";
 
 describe("index", () => {
   it("should be able to render host components and text", () => {
+    const container: RootContainer = {};
     expect(() => {
-      const container = {};
       ReactDebug.render(
         <div id="foo">
           <p className="paragraph">
@@ -13,16 +13,16 @@ describe("index", () => {
         </div>,
         container
       );
-      console.log("========== second render ==============");
       ReactDebug.render(
         <div id="foo" className="bar">
-          <p>
-            <span>bar</span>
+          <p className="paragraph">
+            <span className="em">bar</span>
           </p>
         </div>,
         container
       );
     }).not.toThrow();
+    expect(ReactDebug.toJSON(container.container)).toMatchSnapshot();
   });
   it("should be able to render composite components", () => {
     const Button = (props: { text: string }) => <button>{props.text}</button>;
@@ -34,11 +34,12 @@ describe("index", () => {
         <MemoizedButton text="memo" />
       </section>
     );
+    const container: RootContainer = {};
     expect(() => {
-      const container = {};
       ReactDebug.render(<App message="Hello" />, container);
       ReactDebug.render(<App message="World" />, container);
     }).not.toThrow();
+    expect(ReactDebug.toJSON(container.container)).toMatchSnapshot();
   });
 
   it("should be able to get logs from a container", () => {
@@ -49,5 +50,6 @@ describe("index", () => {
       "commitMount",
       "commitUpdate"
     ]);
+    expect(ReactDebug.toJSON(container.container)).toMatchSnapshot();
   });
 });
