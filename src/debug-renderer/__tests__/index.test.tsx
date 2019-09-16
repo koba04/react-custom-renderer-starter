@@ -25,7 +25,7 @@ describe("index", () => {
     expect(ReactDebug.toJSON(container.container)).toMatchSnapshot();
   });
 
-  it.only("should be able to handle swapping list items", () => {
+  it("should be able to handle swapping list items", () => {
     const container: RootContainer = {};
     expect(() => {
       ReactDebug.render(
