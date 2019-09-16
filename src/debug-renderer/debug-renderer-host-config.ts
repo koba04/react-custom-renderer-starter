@@ -154,6 +154,14 @@ export function insertBefore(
   beforeChild: Instance | TextInstance
 ): void {
   debug("insertBefore", { parentInstance, child, beforeChild });
+  const index = parentInstance.children.indexOf(child);
+  if (index !== -1) {
+    // remove a current instance
+    parentInstance.children.splice(index, 1);
+  }
+  const beforeIndex = parentInstance.children.indexOf(beforeChild);
+  // insert a new instance
+  parentInstance.children.splice(beforeIndex, 0, child);
 }
 
 export function finalizeInitialChildren(

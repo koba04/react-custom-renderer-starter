@@ -24,6 +24,36 @@ describe("index", () => {
     }).not.toThrow();
     expect(ReactDebug.toJSON(container.container)).toMatchSnapshot();
   });
+
+  it.only("should be able to handle swapping list items", () => {
+    const container: RootContainer = {};
+    expect(() => {
+      ReactDebug.render(
+        <ul>
+          <li key="a">a</li>
+          <li key="b">b</li>
+          <li key="c">c</li>
+        </ul>,
+        container
+      );
+      ReactDebug.render(
+        <ul>
+          <li key="b">b</li>
+          <li key="a">a</li>
+          <li key="c">c</li>
+        </ul>,
+        container
+      );
+    }).not.toThrow();
+    const json: any = ReactDebug.toJSON(container.container);
+    expect(json.children.map(child => child.children[0])).toEqual([
+      "b",
+      "a",
+      "c"
+    ]);
+    expect(json).toMatchSnapshot();
+  });
+
   it("should be able to render composite components", () => {
     const Button = (props: { text: string }) => <button>{props.text}</button>;
     const MemoizedButton = React.memo(Button);
@@ -50,6 +80,5 @@ describe("index", () => {
       "commitMount",
       "commitUpdate"
     ]);
-    expect(ReactDebug.toJSON(container.container)).toMatchSnapshot();
   });
 });

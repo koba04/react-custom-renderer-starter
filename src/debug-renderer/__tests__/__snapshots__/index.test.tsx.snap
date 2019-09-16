@@ -12,6 +12,36 @@ Object {
 }
 `;
 
+exports[`index should be able to handle swapping list items 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        "b",
+      ],
+      "props": Object {},
+      "type": "li",
+    },
+    Object {
+      "children": Array [
+        "a",
+      ],
+      "props": Object {},
+      "type": "li",
+    },
+    Object {
+      "children": Array [
+        "c",
+      ],
+      "props": Object {},
+      "type": "li",
+    },
+  ],
+  "props": Object {},
+  "type": "ul",
+}
+`;
+
 exports[`index should be able to render composite components 1`] = `
 Object {
   "children": Array [
