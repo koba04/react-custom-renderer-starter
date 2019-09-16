@@ -1,11 +1,6 @@
 import React from "react";
-import { DebugRenderer } from "./debug-renderer";
-import {
-  Container,
-  Instance,
-  TextInstance,
-  Type
-} from "./debug-renderer-types";
+import { JSONRenderer } from "./json-renderer";
+import { Container, Instance, TextInstance, Type } from "./json-renderer-types";
 import ReactReconciler from "react-reconciler";
 
 export type RootContainer = {
@@ -37,7 +32,7 @@ const toJSON = (instance: Instance | TextInstance): object | string => {
   };
 };
 
-export const ReactDebug = {
+export const ReactJSON = {
   render(
     element: React.ReactNode,
     container: RootContainer,
@@ -55,13 +50,13 @@ export const ReactDebug = {
       container.container = rootContainer;
     }
     if (typeof container.fiberRoot === "undefined") {
-      container.fiberRoot = DebugRenderer.createContainer(
+      container.fiberRoot = JSONRenderer.createContainer(
         rootContainer,
         false,
         false
       );
     }
-    DebugRenderer.updateContainer(element, container.fiberRoot, null, () => {
+    JSONRenderer.updateContainer(element, container.fiberRoot, null, () => {
       callback();
     });
   },

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`index should be able to handle swapping list items 1`] = `
+exports[`ReactJSON should be able to handle swapping list items 1`] = `
 Object {
   "children": Array [
     Object {
@@ -30,7 +30,7 @@ Object {
 }
 `;
 
-exports[`index should be able to render composite components 1`] = `
+exports[`ReactJSON should be able to render composite components 1`] = `
 Object {
   "children": Array [
     Object {
@@ -60,7 +60,7 @@ Object {
 }
 `;
 
-exports[`index should be able to render host components and text 1`] = `
+exports[`ReactJSON should be able to render host components and text 1`] = `
 Object {
   "children": Array [
     Object {
