@@ -7,14 +7,18 @@ describe("index", () => {
       const container = {};
       ReactDebug.render(
         <div id="foo">
-          <p>foo</p>
+          <p className="paragraph">
+            <span>foo</span>
+          </p>
         </div>,
         container
       );
       console.log("========== second render ==============");
       ReactDebug.render(
         <div id="foo" className="bar">
-          <p>bar</p>
+          <p>
+            <span>bar</span>
+          </p>
         </div>,
         container
       );

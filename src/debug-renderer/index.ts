@@ -1,5 +1,6 @@
 import React from "react";
-import { DebugRenderer, Container } from "./debug-renderer";
+import { DebugRenderer } from "./debug-renderer";
+import { Container } from "./debug-renderer-types";
 import ReactReconciler from "react-reconciler";
 
 export type RootContainer = {
