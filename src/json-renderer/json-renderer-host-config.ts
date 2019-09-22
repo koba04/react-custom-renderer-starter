@@ -74,11 +74,21 @@ export function appendChild(parentInstance: Instance, child: Instance) {
   parentInstance.children.push(child);
 }
 
+
+// commitWork
 export function appendChildToContainer(container: Container, child: Instance) {
   container.children.push(child);
   debug("appendChildToContainer", { container, child });
 }
 
+// ReactDOM call .focus() for components that have autoFocus prop
+// https://github.com/facebook/react/blob/42b75ab007a5e7c159933cfdbf2b6845d89fc7f2/packages/react-dom/src/client/ReactDOMHostConfig.js#L346-L351
+// Despite the naming that might imply otherwise, this method only
+// fires if there is an `Update` effect scheduled during mounting.
+// This happens if `finalizeInitialChildren` returns `true` (which it
+// does to implement the `autoFocus` attribute on the client). But
+// there are also other cases when this might happen (such as patching
+// up text content during hydration mismatch). So we'll check this again.
 export function commitMount(
   instance: Instance,
   type: Type,
@@ -154,16 +164,19 @@ export function insertBefore(
   beforeChild: Instance | TextInstance
 ): void {
   debug("insertBefore", { parentInstance, child, beforeChild });
+  // we have to remove a current instance at first
   const index = parentInstance.children.indexOf(child);
   if (index !== -1) {
-    // remove a current instance
     parentInstance.children.splice(index, 1);
   }
+  // And then, we insert a new instance into a new index
   const beforeIndex = parentInstance.children.indexOf(beforeChild);
-  // insert a new instance
   parentInstance.children.splice(beforeIndex, 0, child);
 }
 
+// ReactDOM
+// setInitialProperties(domElement, type, props, rootContainerInstance);
+// return shouldAutoFocusHostComponent(type, props);
 export function finalizeInitialChildren(
   parentInstance: Instance,
   type: Type,
@@ -171,6 +184,8 @@ export function finalizeInitialChildren(
   rootContainerInstance: Container,
   hostContext: HostContext
 ): boolean {
+
+
   debug("finalizeInitialChildren");
   return true;
 }
@@ -179,6 +194,10 @@ export function removeChildFromContainer() {
   debug("removeChildFromContainer");
 }
 
+// completeWork
+// ReactDOM
+// return diffProperties
+// if this returns a falsy value, is the update skipped?
 export function prepareUpdate(
   instance: Instance,
   type: Type,
@@ -241,7 +260,7 @@ export const now = Date.now;
 // Temporary workaround for scenario where multiple renderers concurrently
 // render using the same context objects. E.g. React DOM and React ART on the
 // same page. DOM is the primary renderer; ART is the secondary renderer.
-export const isPrimaryRenderer = false;
+export const isPrimaryRenderer = true;
 export const supportsMutation = true;
 export const supportsPersistence = false;
 export const supportsHydration = false;
