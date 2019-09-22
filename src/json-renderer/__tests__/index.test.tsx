@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ReactJSON, RootContainer } from "../index";
+
+const waitEffect = () => new Promise(r => setTimeout(r));
 
 describe("ReactJSON", () => {
   it("should be able to render host components and text", () => {
@@ -81,4 +83,22 @@ describe("ReactJSON", () => {
       "commitUpdate"
     ]);
   });
+
+  it("should be able to use Hooks", async () => {
+    const container: RootContainer = {};
+    const Counter = () => {
+      const [count, setCount] = useState(0);
+      useEffect(() => {
+        setCount(1);
+      }, []);
+      return <div>{count}</div>;
+    }
+    ReactJSON.render(<Counter />, container);
+    let json: any = ReactJSON.toJSON(container.container);
+    expect(json.children[0]).toBe("0");
+    // TODO: implement .act();
+    await waitEffect();
+    json = ReactJSON.toJSON(container.container);
+    expect(json.children[0]).toBe("1");
+  })
 });
