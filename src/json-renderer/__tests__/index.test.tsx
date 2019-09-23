@@ -92,7 +92,7 @@ describe("ReactJSON", () => {
         setCount(1);
       }, []);
       return <div>{count}</div>;
-    }
+    };
     ReactJSON.render(<Counter />, container);
     let json: any = ReactJSON.toJSON(container.container);
     expect(json.children[0]).toBe("0");
@@ -100,5 +100,5 @@ describe("ReactJSON", () => {
     await waitEffect();
     json = ReactJSON.toJSON(container.container);
     expect(json.children[0]).toBe("1");
-  })
+  });
 });

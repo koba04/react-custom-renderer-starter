@@ -74,7 +74,6 @@ export function appendChild(parentInstance: Instance, child: Instance) {
   parentInstance.children.push(child);
 }
 
-
 // commitWork
 export function appendChildToContainer(container: Container, child: Instance) {
   container.children.push(child);
@@ -184,8 +183,6 @@ export function finalizeInitialChildren(
   rootContainerInstance: Container,
   hostContext: HostContext
 ): boolean {
-
-
   debug("finalizeInitialChildren");
   return true;
 }
