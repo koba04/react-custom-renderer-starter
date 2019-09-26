@@ -74,7 +74,8 @@ export function appendChild(parentInstance: Instance, child: Instance) {
   parentInstance.children.push(child);
 }
 
-// commitWork
+// This is called on commitWork, which append DOM nodes to the container that is passed as the second argument of ReactDOM.render.
+// As the result, React Components are mounted at the DOM tree, which is a side-effect.
 export function appendChildToContainer(container: Container, child: Instance) {
   container.children.push(child);
   debug("appendChildToContainer", { container, child });
@@ -109,6 +110,8 @@ export function commitMount(
   ]);
 }
 
+// TODO: what ReactDOM does at this
+// Maybe ReactDOM updates DOMs based on new and old props.
 export function commitUpdate(
   instance: Instance,
   updatePayload: object,
@@ -138,6 +141,7 @@ export function commitUpdate(
   instance.props = newProps;
 }
 
+// Update the TextInstance, ReactDOM update a textNode value
 export function commitTextUpdate(
   textInstance: TextInstance,
   oldText: string,
@@ -149,6 +153,7 @@ export function commitTextUpdate(
   }
 }
 
+// FIXME: This is probably called on mouting...
 export function appendInitialChild(
   parentInstance: Instance,
   child: Instance | TextInstance
