@@ -162,6 +162,8 @@ export function appendInitialChild(
   parentInstance.children.push(child);
 }
 
+// This is called when the index has been changed in a list
+// so we have to remove an item from the old index and insert a new item with a new index
 export function insertBefore(
   parentInstance: Instance,
   child: Instance | TextInstance,
