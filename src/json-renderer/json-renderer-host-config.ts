@@ -18,6 +18,9 @@ const context: HostContext = {
   name: "context"
 };
 
+// HostConfig is used like the following, of which $$$hostConfig is an object exported from a HostConfig file.
+// https://github.com/facebook/react/blob/master/packages/react-reconciler/src/forks/ReactFiberHostConfig.custom.js
+
 export function getPublicInstance(
   instance: Instance | TextInstance
 ): PublicInstance {
