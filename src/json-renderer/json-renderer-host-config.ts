@@ -80,8 +80,8 @@ export function appendChild(parentInstance: Instance, child: Instance) {
 // This is called on commitWork, which append DOM nodes to the container that is passed as the second argument of ReactDOM.render.
 // As the result, React Components are mounted at the DOM tree, which is a side-effect.
 export function appendChildToContainer(container: Container, child: Instance) {
-  container.children.push(child);
   debug("appendChildToContainer", { container, child });
+  container.children.push(child);
 }
 
 // ReactDOM call .focus() for components that have autoFocus prop
@@ -204,7 +204,6 @@ export function removeChildFromContainer() {
 // completeWork
 // ReactDOM
 // return diffProperties
-// if this returns a falsy value, is the update skipped?
 export function prepareUpdate(
   instance: Instance,
   type: Type,
@@ -214,7 +213,9 @@ export function prepareUpdate(
   hostContext: HostContext
 ): null | UpdatePayload {
   debug("prepareUpdate");
-  return {};
+  // Return diff properties, which is passed to commitUpdate.
+  // if this returns a null, commmitUpdate in this updates never been called.
+  return {props: 'diffs'};
 }
 
 export function shouldSetTextContent(type: Type, props: Props): boolean {
