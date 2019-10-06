@@ -215,7 +215,7 @@ export function prepareUpdate(
   debug("prepareUpdate");
   // Return diff properties, which is passed to commitUpdate.
   // if this returns a null, commmitUpdate in this updates never been called.
-  return {props: 'diffs'};
+  return { props: "diffs" };
 }
 
 export function shouldSetTextContent(type: Type, props: Props): boolean {
