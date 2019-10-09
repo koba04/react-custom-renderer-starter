@@ -24,6 +24,10 @@ For your references, these are HostConfigs of custom renderers
 
 ### getPublicInstance(instance: Instance | TextInstance): PublicInstance;
 
+Return a public instance of Host component.
+
+`react-dom` returns a DOM element because it is a public instance that you can get through `ref`.
+
 ### getRootHostContext(rootContainerInstance: Container): HostContext;
 
 ### getChildHostContext(parentHostContext: HostContext, type: Type, rootContainerInstance: Container): HostContext
@@ -34,17 +38,44 @@ For your references, these are HostConfigs of custom renderers
 
 ### createInstance(type: Type, props: Props, rootContainerInstance: Container, hostContext: HostContext, internalInstanceHandle: OpaqueHandle): Instance;
 
+Return an instance.
+
+`react-dom` returns a DOM element.
+
 ### appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void;
+
+Append an instance into a parent instance.
+
+`react-dom` calls `parentInstance.appendChild(child)`.
+This is called in the render phase but it's ok because a DOM tree hasn't been mounted yet.
 
 ### finalizeInitialChildren(parentInstance: Instance, type: Type, props: Props, rootContainerInstance: Container, hostContext: HostContext): boolean;
 
+Set initial properties and return whether `commitMount` should be called in later or not.
+
+`react-dom` set DOM properties and return a boolean that indicates whether `dom.focus()` should be called in `commitMount` or not.
+
 ### prepareUpdate(instance: Instance, type: Type, oldProps: Props, newProps: Props, rootContainerInstance: Container, hostContext: HostContext): null | UpdatePayload;
+
+Return `updatePayload` includes properties for diffs
+
+`react-dom` returns a props list has to be applied.
 
 ### shouldSetTextContent(type: Type, props: Props): boolean;
 
+Return whether its content is a textContext or not.
+
 ### shouldDeprioritizeSubtree(type: Type, props: Props): boolean;
 
+Return whether updating its subtree is deprioritized or not.
+
+`react-dom` return a flag whether `hidden` prop is `true` or not.
+
 ### createTextInstance(text: string, rootContainerInstance: Container, hostContext: HostContext, internalInstanceHandle: OpaqueHandle): TextInstance;
+
+Return an text instance.
+
+`react-dom` return a textNode.
 
 ### scheduleDeferredCallback(callback: () => any, options?: { timeout: number }): any;
 
