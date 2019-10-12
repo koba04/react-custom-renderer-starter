@@ -8,14 +8,6 @@ export type RootContainer = {
   container?: Container;
 };
 
-const getComponentName = (type: Type): string => {
-  if (typeof type === "string") return type;
-  if (typeof type === "function") {
-    return (type as any).displayName || (type as any).name || null;
-  }
-  return getComponentName((type as any).type);
-};
-
 const toJSON = (instance: Instance | TextInstance): object | string => {
   if (instance.tag === "TEXT") {
     return instance.text;
@@ -23,7 +15,7 @@ const toJSON = (instance: Instance | TextInstance): object | string => {
   // ignore children in props, we use children in the instance.
   const { children, ...props } = instance.props;
   return {
-    type: getComponentName(instance.type),
+    type: instance.type,
     props,
     // child might include ReactElement so this is a type mismatch
     children: Array.isArray(instance.children)
