@@ -197,8 +197,22 @@ export function finalizeInitialChildren(
   return true;
 }
 
-export function removeChildFromContainer() {
+export function removeChildFromContainer(
+  container: Container,
+  child: Instance | TextInstance
+) {
   debug("removeChildFromContainer");
+  const index = container.children.indexOf(child);
+  container.children.splice(index, 1);
+}
+
+export function removeChild(
+  parentInstance: Instance | Container,
+  child: Instance | TextInstance
+): void {
+  debug("removeChild");
+  const index = parentInstance.children.indexOf(child);
+  parentInstance.children.splice(index, 1);
 }
 
 // completeWork

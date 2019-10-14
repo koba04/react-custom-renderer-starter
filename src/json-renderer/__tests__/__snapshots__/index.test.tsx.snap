@@ -5,6 +5,29 @@ Object {
   "children": Array [
     Object {
       "children": Array [
+        "a",
+      ],
+      "props": Object {},
+      "type": "li",
+    },
+    Object {
+      "children": Array [
+        "c",
+      ],
+      "props": Object {},
+      "type": "li",
+    },
+  ],
+  "props": Object {},
+  "type": "ul",
+}
+`;
+
+exports[`ReactJSON should be able to handle swapping list items 2`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
         "b",
       ],
       "props": Object {},

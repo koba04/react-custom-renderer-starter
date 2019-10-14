@@ -40,6 +40,30 @@ describe("ReactJSON", () => {
       );
       ReactJSON.render(
         <ul>
+          <li key="a">a</li>
+          <li key="c">c</li>
+        </ul>,
+        container
+      );
+    }).not.toThrow();
+    const json: any = ReactJSON.toJSON(container.container);
+    expect(json.children.map(child => child.children[0])).toEqual(["a", "c"]);
+    expect(json).toMatchSnapshot();
+  });
+
+  it("should be able to handle swapping list items", () => {
+    const container: RootContainer = {};
+    expect(() => {
+      ReactJSON.render(
+        <ul>
+          <li key="a">a</li>
+          <li key="b">b</li>
+          <li key="c">c</li>
+        </ul>,
+        container
+      );
+      ReactJSON.render(
+        <ul>
           <li key="b">b</li>
           <li key="a">a</li>
           <li key="c">c</li>
